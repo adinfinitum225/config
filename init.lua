@@ -16,8 +16,10 @@ require('packer').startup(function(use)
 	use 'hrsh7th/cmp-nvim-lsp' -- LSP source for nvim-cmp
 	use 'saadparwaiz1/cmp_luasnip' -- Snippets source for nvim-cmp
 	use 'L3MON4D3/LuaSnip' -- Snippets plugin
+	use 'folke/tokyonight.nvim' -- Color Scheme
 end)
 
+-- Setup Mason and set icons for package status
 require('mason').setup({
 	ui = {
 		icons = {
@@ -29,13 +31,10 @@ require('mason').setup({
 })
 require('mason-lspconfig').setup()
 
--- Possible dynamic setup of servers. Lua worked but HTML didn't work
---
---require('mason-lspconfig').setup_handlers {
---	function (server_name)
---		require('lspconfig')[server_name].setup {}
---	end,
---}
+-- Configuration for Tokyo Night color Scheme
+require('tokyonight').setup({})
+-- Start Tokyo Night
+vim.cmd[[colorscheme tokyonight]]
 
 -- Add additional capabilities supported by nvim-cmp
 local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -44,13 +43,41 @@ capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 -- Needs to be before any reference to lspconfig. It worked before, but it should be a bit farther up
 local lspconfig = require('lspconfig')
 
+-- Possible dynamic setup of servers. Lua worked but HTML didn't work
+
+require('mason-lspconfig').setup_handlers {
+	function (server_name)
+		require('lspconfig')[server_name].setup {
+			capabilities = capabilities,
+		}
+	end,
+	['html'] = function ()
+		lspconfig.html.setup {
+			capabilities = capabilities,
+			opts = {
+				settings = {
+					html = {
+						autoClosingTags = true,
+						format = {
+							templating = true,
+						},
+						hover = {
+							documentation = true,
+						},
+					},
+				},
+			},
+		}
+	end,
+}
+
 -- Enable servers with extra completion capabilities, supposedly
-local servers = { 'sumneko_lua', 'html' }
-for _, lsp in ipairs(servers) do
-	lspconfig[lsp].setup {
-		capabilities = capabilities,
-	}
-end
+--local servers = { 'sumneko_lua', 'html', 'cssls' }
+--for _, lsp in ipairs(servers) do
+----	lspconfig[lsp].setup {
+--		capabilities = capabilities,
+--	}
+--end
 
 -- Setup luasnip
 local luasnip = require 'luasnip'
