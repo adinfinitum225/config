@@ -1,7 +1,7 @@
 -- Version issues using debian
 
 	- NeoVim
-	Make sure to install a version of NeoVim at least 0.5. It will need to be installed from source. Instructions are on the Git repo. Don't forget to git checkout stable. This will allow for Packer.nvim to be properly installed. Download the package 'checkinstall'. Using this instade of `make install` will create a .deb package. This can be uploaded to github or just created locally. Using apt with this .deb file works better than make install. 
+	Make sure to install a version of NeoVim at least 0.5. It will need to be installed from source. Instructions are on the Git repo. Don't forget to git checkout stable. This will allow for Packer.nvim to be properly installed. Download the package 'checkinstall'. Using this instade of `make install` will create a .deb package. This can be uploaded to github or just created locally. Using apt with this .deb file works better than make install. Make sure that the apt command has the path argument with a leading forward slash, ex. `sudo apt install "./source/nvim/..."`. 
 	Mason.nvim will need a new version of NPM to properly install some of the LSP servers. Fo this you need to run
 		`curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash`
 	Then reboot the terminal. After that you can run `nvm install node` and it should install the latest version of node. This will allow the Typescript LSP servers to be properly installed.
