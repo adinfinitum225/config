@@ -32,3 +32,8 @@ elif [ "$SSH_AUTH_SOCK" ] && [ $agent_run_state=1 ]; then
 fi
 
 unset env
+
+# Change default editor to NeoVim
+# Probably need to find a way to fall back to Vim...
+export EDITOR="/usr/local/bin/nvim"
+export VISUAL="$EDITOR"
